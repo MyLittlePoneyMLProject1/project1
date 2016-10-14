@@ -1,0 +1,5 @@
+#OS junk files
+*.DS_Store
+
+#CSV file, which are too large for github
+*.csv
