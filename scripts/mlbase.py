@@ -85,7 +85,7 @@ def least_squares_GD (y, tx, gamma, max_iters, initial_w = np.zeros (tx.shape [1
 # 
 """
 
-def least_squares_GD (y, tx, gamma, max_iters, initial_w = np.zeros (tx.shape [1]), batch_size = len (y) / 10, loss_function = compute_mse_loss, gradient_function = compute_mse_gradient):
+def least_squares_SGD (y, tx, gamma, max_iters, initial_w = np.zeros (tx.shape [1]), batch_size = len (y) / 10, loss_function = compute_mse_loss, gradient_function = compute_mse_gradient):
     
     # Initialize w
     w = initial_w
@@ -122,12 +122,16 @@ def least_squares_GD (y, tx, gamma, max_iters, initial_w = np.zeros (tx.shape [1
 # Returns
 # 
 #     w (the exact weight minimizing the loss function for given y and tx)
+#     loss (the loss of this optimal w)
 # 
 """
 
 def least_squares (y, tx):
     
-    return np.linalg.inv (tx.T.dot (tx)).dot (tx.T).dot (y)
+    w = np.linalg.inv (tx.T.dot (tx)).dot (tx.T).dot (y)
+    loss = compute_mse_loss (y, tx, w)
+    
+    return loss, w
 
 
 # Function using Ridge Regression method to compute the weight (MAE only)
@@ -142,9 +146,13 @@ def least_squares (y, tx):
 # Returns
 # 
 #     w (the exact weight minimizing the loss function for given y, tx and lambda)
+#     loss (the loss of this optimal w)
 # 
 """
 
 def ridge_regression (y, tx, lambda_ = 0):
     
-    return np.linalg.inv (tx.T.dot (tx) + lambda_ * 2 * tx.shape [0] * np.eye(tx.shape [1])).dot (tx.T).dot (y)
+    w = np.linalg.inv (tx.T.dot (tx) + lambda_ * 2 * tx.shape [0] * np.eye(tx.shape [1])).dot (tx.T).dot (y)
+    loss = compute_mse_loss (y, tx, w)
+    
+    return loss, w
